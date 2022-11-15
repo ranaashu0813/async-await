@@ -1,0 +1,25 @@
+
+router.post('/register',async  (req,res)=>{
+    const {name,email,phone,work,password,confirm_password} = req.body;
+        if (!name|| !email|| !phone || !work || !password||! confirm_password){
+            
+            return res.status(422).json({error:"pls fill all the data"});
+            // console.log("fill data properly");
+        }
+
+        try{
+       const userexist= await user.findOne({ email: email });
+      if(userexist){
+        return res.status(422).json({error:"email already exist"});
+    }
+    const newuser = new user({name,email,phone,work,password,confirm_password});
+   await newuser.save();
+
+    res.status(201).json({message:"register succesfull"});
+        }catch(err) {
+            console.log(err);
+        }
+        //  res.send("it's my router page");  
+        //  res.json({message : req.body});
+        //  console.log(req.body);
+});
